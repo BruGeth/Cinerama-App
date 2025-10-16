@@ -39,6 +39,15 @@ npm run web
 - La pantalla de autenticación principal es [src/screens/AuthScreen.js](src/screens/AuthScreen.js) y alterna entre los componentes [`LoginForm`](src/components/LoginForm.js) y [`RegisterForm`](src/components/RegisterForm.js).
 - Iconos provienen de `@expo/vector-icons` (ver [`LoginForm`](src/components/LoginForm.js), [`RegisterForm`](src/components/RegisterForm.js)).
 
+## Variables de entorno (.env)
+
+- Crea un archivo `.env` en la raíz del proyecto con tu clave de TMDB:
+```env
+TMDB_API_KEY=TU_TMDB_API_KEY_AQUI
+```
+- Reemplaza TU_TMDB_API_KEY_AQUI por tu clave real.
+- Mantén este archivo local y no lo subas al repositorio.
+
 ## Contribuir
 1. Crear un branch feature/bugfix.
 2. Añadir cambios y tests (si aplica).
