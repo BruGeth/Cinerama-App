@@ -1,0 +1,39 @@
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import HomeScreen from "../screens/HomeScreen";
+import CarteleraScreen from "../screens/CarteleraScreen";
+import PromocionesScreen from "../screens/PromocionesScreen";
+import PerfilScreen from "../screens/PerfilScreen";
+
+const Tab = createBottomTabNavigator();
+
+export default function MainTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: "#ff5a5f",
+        tabBarInactiveTintColor: "#666",
+        tabBarIcon: ({ color, size, focused }) => {
+          switch (route.name) {
+            case "Home":
+              return <Ionicons name={focused ? "home" : "home-outline"} size={size} color={color} />;
+            case "Cartelera":
+              return <MaterialIcons name="local-movies" size={size} color={color} />;
+            case "Promociones":
+              return <FontAwesome5 name="ticket-alt" size={size} color={color} />;
+            case "Perfil":
+              return <Ionicons name={focused ? "person" : "person-outline"} size={size} color={color} />;
+            default:
+              return null;
+          }
+        },
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} options={{ title: "Home" }} />
+      <Tab.Screen name="Cartelera" component={CarteleraScreen} options={{ title: "Cartelera" }} />
+      <Tab.Screen name="Promociones" component={PromocionesScreen} options={{ title: "Promociones" }} />
+      <Tab.Screen name="Perfil" component={PerfilScreen} options={{ title: "Perfil" }} />
+    </Tab.Navigator>
+  );
+}
