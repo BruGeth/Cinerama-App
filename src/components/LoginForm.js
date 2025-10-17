@@ -17,6 +17,13 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
+    validateField('email', email);
+    validateField('password', password);
+
+    const hasErrors = !validateEmail(email) || password.length < 6 || email.trim() === '' || password === '';
+    if (hasErrors) return;
+
+    Alert.alert('Login exitoso', 'Has iniciado sesión correctamente (simulado).');
     console.log('Login attempt:', { email, password, rememberMe });
   };
 
