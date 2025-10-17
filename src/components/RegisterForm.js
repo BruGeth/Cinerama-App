@@ -77,6 +77,7 @@ const validateEmail = (value) => {
             style={styles.input}
             value={email}
             onChangeText={setEmail}
+            onBlur={() => validateField('email', email)}
             placeholder=""
             keyboardType="email-address"
             autoCapitalize="none"
@@ -90,6 +91,7 @@ const validateEmail = (value) => {
               style={styles.passwordInput}
               value={password}
               onChangeText={setPassword}
+              onBlur={() => validateField('password', password)}
               placeholder=""
               secureTextEntry={!showPassword}
               autoCapitalize="none"
@@ -114,6 +116,7 @@ const validateEmail = (value) => {
               style={styles.passwordInput}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              onBlur={() => validateField('confirmPassword', confirmPassword)}
               placeholder=""
               secureTextEntry={!showConfirmPassword}
               autoCapitalize="none"
