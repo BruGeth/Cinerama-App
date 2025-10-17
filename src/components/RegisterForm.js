@@ -27,6 +27,16 @@ const validateEmail = (value) => {
     return re.test(value);
   };
 
+const isFormValid =
+    acceptTerms &&
+    fullName.trim() !== '' &&
+    email.trim() !== '' &&
+    password !== '' &&
+    confirmPassword !== '' &&
+    !errors.email &&
+    !errors.password &&
+    !errors.confirmPassword;
+
   const validateField = (field, value) => {
     setErrors((prev) => {
       const next = { ...prev };
@@ -153,10 +163,10 @@ const validateEmail = (value) => {
         <TouchableOpacity
           style={[
             styles.registerButton,
-            !acceptTerms && styles.registerButtonDisabled,
+            !isFormValid && styles.registerButtonDisabled,
           ]}
           onPress={handleRegister}
-          disabled={!acceptTerms}
+          disabled={!isFormValid}
         >
           <Text style={styles.registerButtonText}>Registrarse</Text>
         </TouchableOpacity>
