@@ -8,6 +8,7 @@ import {
   Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { validateEmail, validatePassword } from '../utils/validators';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export default function LoginForm() {
     validateField('email', email);
     validateField('password', password);
 
-    const hasErrors = !validateEmail(email) || password.length < 6 || email.trim() === '' || password === '';
+    const hasErrors = !validateEmail(email) || !validatePassword(password) || email.trim() === '' || password === '';
     if (hasErrors) return;
 
     Alert.alert('Login exitoso', 'Has iniciado sesión correctamente (simulado).');
@@ -31,11 +32,6 @@ export default function LoginForm() {
     console.log('Forgot password');
   };
 
-  const validateEmail = (value) => {
-    const re = /^\S+@\S+\.\S+$/;
-    return re.test(value);
-  };
-
   const validateField = (field, value) => {
     setErrors((prev) => {
       const next = { ...prev };
@@ -43,7 +39,7 @@ export default function LoginForm() {
         next.email = value ? (validateEmail(value) ? '' : 'Formato de email inválido') : 'El email es obligatorio';
       }
       if (field === 'password') {
-        next.password = value ? (value.length >= 6 ? '' : 'La contraseña debe tener mínimo 6 caracteres') : 'La contraseña es obligatoria';
+        next.password = value ? (validatePassword(value) ? '' : 'La contraseña debe tener mínimo 6 caracteres') : 'La contraseña es obligatoria';
       }
       return next;
     });
