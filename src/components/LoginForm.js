@@ -42,6 +42,12 @@ export default function LoginForm() {
     });
   };
 
+  const isFormValid =
+    email.trim() !== '' &&
+    password !== '' &&
+    !errors.email &&
+    !errors.password;
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>Iniciar Sesión</Text>
@@ -89,7 +95,9 @@ export default function LoginForm() {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <TouchableOpacity style={[styles.loginButton,
+          !isFormValid && styles.loginButtonDisabled,
+        ]} onPress={handleLogin} disabled={!isFormValid}>
           <Text style={styles.loginButtonText}>Iniciar sesión</Text>
         </TouchableOpacity>
         <TouchableOpacity
