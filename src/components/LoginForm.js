@@ -5,22 +5,51 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { validateEmail, validatePassword } from '../utils/validators';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [errors, setErrors] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
+    validateField('email', email);
+    validateField('password', password);
+
+    const hasErrors = !validateEmail(email) || !validatePassword(password) || email.trim() === '' || password === '';
+    if (hasErrors) return;
+
+    Alert.alert('Login exitoso', 'Has iniciado sesión correctamente (simulado).');
     console.log('Login attempt:', { email, password, rememberMe });
   };
 
   const handleForgotPassword = () => {
     console.log('Forgot password');
   };
+
+  const validateField = (field, value) => {
+    setErrors((prev) => {
+      const next = { ...prev };
+      if (field === 'email') {
+        next.email = value ? (validateEmail(value) ? '' : 'Formato de email inválido') : 'El email es obligatorio';
+      }
+      if (field === 'password') {
+        next.password = value ? (validatePassword(value) ? '' : 'La contraseña debe tener mínimo 6 caracteres') : 'La contraseña es obligatoria';
+      }
+      return next;
+    });
+  };
+
+  const isFormValid =
+    email.trim() !== '' &&
+    password !== '' &&
+    !errors.email &&
+    !errors.password;
 
   return (
     <View style={styles.card}>
@@ -35,11 +64,13 @@ export default function LoginForm() {
             style={styles.input}
             value={email}
             onChangeText={setEmail}
+            onBlur={() => validateField('email', email)}
             placeholder=""
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
           />
+          {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Contraseña</Text>
@@ -48,11 +79,13 @@ export default function LoginForm() {
               style={styles.passwordInput}
               value={password}
               onChangeText={setPassword}
+              onBlur={() => validateField('password', password)}
               placeholder=""
               secureTextEntry={!showPassword}
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
             <TouchableOpacity
               style={styles.eyeIcon}
               onPress={() => setShowPassword(!showPassword)}
@@ -65,7 +98,9 @@ export default function LoginForm() {
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+        <TouchableOpacity style={[styles.loginButton,
+          !isFormValid && styles.loginButtonDisabled,
+        ]} onPress={handleLogin} disabled={!isFormValid}>
           <Text style={styles.loginButtonText}>Iniciar sesión</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -160,10 +195,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
+  loginButtonDisabled: {
+    backgroundColor: '#ccc',
+  },
   loginButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+  },
+  errorText: {
+    color: '#D32F2F',
+    fontSize: 13,
+    marginTop: 6,
+    marginLeft: 6,
   },
   rememberContainer: {
     flexDirection: 'row',
