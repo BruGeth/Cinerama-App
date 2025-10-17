@@ -61,6 +61,7 @@ export default function LoginForm() {
             autoCapitalize="none"
             autoCorrect={false}
           />
+          {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Contraseña</Text>
@@ -75,6 +76,7 @@ export default function LoginForm() {
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
             <TouchableOpacity
               style={styles.eyeIcon}
               onPress={() => setShowPassword(!showPassword)}
