@@ -24,6 +24,24 @@ export default function LoginForm() {
     console.log('Forgot password');
   };
 
+  const validateEmail = (value) => {
+    const re = /^\S+@\S+\.\S+$/;
+    return re.test(value);
+  };
+
+  const validateField = (field, value) => {
+    setErrors((prev) => {
+      const next = { ...prev };
+      if (field === 'email') {
+        next.email = value ? (validateEmail(value) ? '' : 'Formato de email inválido') : 'El email es obligatorio';
+      }
+      if (field === 'password') {
+        next.password = value ? (value.length >= 6 ? '' : 'La contraseña debe tener mínimo 6 caracteres') : 'La contraseña es obligatoria';
+      }
+      return next;
+    });
+  };
+
   return (
     <View style={styles.card}>
       <Text style={styles.title}>Iniciar Sesión</Text>
