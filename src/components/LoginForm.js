@@ -199,10 +199,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
   },
+  loginButtonDisabled: {
+    backgroundColor: '#ccc',
+  },
   loginButtonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+  },
+  errorText: {
+    color: '#D32F2F',
+    fontSize: 13,
+    marginTop: 6,
+    marginLeft: 6,
   },
   rememberContainer: {
     flexDirection: 'row',
