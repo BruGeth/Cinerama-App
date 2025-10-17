@@ -54,6 +54,25 @@ const isFormValid =
   };
 
   const handleRegister = () => {
+    // validar todos los campos antes de enviar
+    validateField('email', email);
+    validateField('password', password);
+    validateField('confirmPassword', confirmPassword);
+
+    // Pequeña espera para que setErrors se aplique o comprobar directamente:
+    const hasErrors =
+      !validateEmail(email) ||
+      password.length < 6 ||
+      password !== confirmPassword ||
+      fullName.trim() === '' ||
+      !acceptTerms;
+
+    if (hasErrors) {
+      return;
+    }
+
+    // simulación de registro exitoso
+    Alert.alert('Registro exitoso', 'Tu cuenta ha sido creada correctamente.');
     console.log('Register attempt:', {
       fullName,
       email,
