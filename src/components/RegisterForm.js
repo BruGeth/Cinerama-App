@@ -83,6 +83,7 @@ const validateEmail = (value) => {
             autoCapitalize="none"
             autoCorrect={false}
           />
+          {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Contraseña</Text>
@@ -97,6 +98,7 @@ const validateEmail = (value) => {
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
             <TouchableOpacity
               style={styles.eyeIcon}
               onPress={() => setShowPassword(!showPassword)}
@@ -122,6 +124,7 @@ const validateEmail = (value) => {
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {errors.confirmPassword ? <Text style={styles.errorText}>{errors.confirmPassword}</Text> : null}
             <TouchableOpacity
               style={styles.eyeIcon}
               onPress={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -262,5 +265,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+  },
+  errorText: {
+    color: '#D32F2F',
+    fontSize: 13,
+    marginTop: 6,
+    marginLeft: 6,
   },
 });
