@@ -55,6 +55,7 @@ export default function LoginForm() {
             style={styles.input}
             value={email}
             onChangeText={setEmail}
+            onBlur={() => validateField('email', email)}
             placeholder=""
             keyboardType="email-address"
             autoCapitalize="none"
@@ -68,6 +69,7 @@ export default function LoginForm() {
               style={styles.passwordInput}
               value={password}
               onChangeText={setPassword}
+              onBlur={() => validateField('password', password)}
               placeholder=""
               secureTextEntry={!showPassword}
               autoCapitalize="none"
