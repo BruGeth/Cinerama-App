@@ -8,6 +8,7 @@ import {
   Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { validateEmail, validatePassword } from '../utils/validators';
 
 export default function RegisterForm() {
   const [fullName, setFullName] = useState('');
@@ -23,10 +24,6 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-const validateEmail = (value) => {
-    const re = /^\S+@\S+\.\S+$/;
-    return re.test(value);
-  };
 
 const isFormValid =
     acceptTerms &&
@@ -45,7 +42,7 @@ const isFormValid =
         next.email = value ? (validateEmail(value) ? '' : 'Formato de email inválido') : 'El email es obligatorio';
       }
       if (field === 'password') {
-        next.password = value ? (value.length >= 6 ? '' : 'La contraseña debe tener mínimo 6 caracteres') : 'La contraseña es obligatoria';
+        next.password = value ? (validatePassword(value) ? '' : 'La contraseña debe tener mínimo 6 caracteres') : 'La contraseña es obligatoria';
       }
       if (field === 'confirmPassword') {
         next.confirmPassword = value ? (value === password ? '' : 'Las contraseñas no coinciden') : 'Confirma la contraseña';
@@ -63,7 +60,7 @@ const isFormValid =
     // Pequeña espera para que setErrors se aplique o comprobar directamente:
     const hasErrors =
       !validateEmail(email) ||
-      password.length < 6 ||
+      !validatePassword(password) ||
       password !== confirmPassword ||
       fullName.trim() === '' ||
       !acceptTerms;
