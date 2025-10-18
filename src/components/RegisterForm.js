@@ -5,7 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { validateEmail, validatePassword } from '../utils/validators';
@@ -23,6 +24,7 @@ export default function RegisterForm() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
 const isFormValid =
@@ -51,33 +53,56 @@ const isFormValid =
     });
   };
 
-  const handleRegister = () => {
-    // validar todos los campos antes de enviar
+  const handleRegister = async () => {
+    // validaciones locales
     validateField('email', email);
     validateField('password', password);
     validateField('confirmPassword', confirmPassword);
 
-    // Pequeña espera para que setErrors se aplique o comprobar directamente:
-    const hasErrors =
+    if (
       !validateEmail(email) ||
       !validatePassword(password) ||
       password !== confirmPassword ||
       fullName.trim() === '' ||
-      !acceptTerms;
-
-    if (hasErrors) {
+      !acceptTerms
+    ) {
+      Alert.alert('Error', 'Por favor corrige los campos marcados.');
       return;
     }
 
-    // simulación de registro exitoso
-    Alert.alert('Registro exitoso', 'Tu cuenta ha sido creada correctamente.');
-    console.log('Register attempt:', {
-      fullName,
-      email,
-      password,
-      confirmPassword,
-      acceptTerms,
-    });
+    setLoading(true);
+    try {
+      // Ajusta la URL según tu entorno:
+      // - Android emulator (native): use 10.0.2.2
+      // - iOS simulator or web: use localhost
+      // - dispositivo físico con Expo: usa la IP de tu PC en la LAN
+      const BASE = 'http://172.20.10.11:3000'; // <- reemplaza por la IP que ves en Metro si es distinta
+      const res = await fetch(`${BASE}/api/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: fullName, email, password }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        Alert.alert('Error', data.message || 'No se pudo registrar el usuario');
+        return;
+      }
+
+      Alert.alert('Registro exitoso', 'Tu cuenta ha sido creada correctamente.');
+      // limpiar formulario
+      setFullName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      setAcceptTerms(false);
+    } catch (err) {
+      console.error('register error', err);
+      Alert.alert('Error', 'No se pudo conectar con el servidor');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -180,12 +205,16 @@ const isFormValid =
         <TouchableOpacity
           style={[
             styles.registerButton,
-            !isFormValid && styles.registerButtonDisabled,
+            (!isFormValid || loading) && styles.registerButtonDisabled,
           ]}
           onPress={handleRegister}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
-          <Text style={styles.registerButtonText}>Registrarse</Text>
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.registerButtonText}>Registrarse</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>
