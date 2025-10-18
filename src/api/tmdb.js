@@ -69,3 +69,9 @@ export const getPopularMovies = async () => {
     return [];
   }
 };
+    return data.results;
+  } catch (error) {
+    console.error("Error al obtener películas:", error);
+    return [];
+  }
+};

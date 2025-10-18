@@ -5,8 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { validateEmail, validatePassword } from '../utils/validators';
 
 export default function RegisterForm() {
   const [fullName, setFullName] = useState('');
@@ -14,10 +16,61 @@ export default function RegisterForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptTerms, setAcceptTerms] = useState(false);
+   const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+
+const isFormValid =
+    acceptTerms &&
+    fullName.trim() !== '' &&
+    email.trim() !== '' &&
+    password !== '' &&
+    confirmPassword !== '' &&
+    !errors.email &&
+    !errors.password &&
+    !errors.confirmPassword;
+
+  const validateField = (field, value) => {
+    setErrors((prev) => {
+      const next = { ...prev };
+      if (field === 'email') {
+        next.email = value ? (validateEmail(value) ? '' : 'Formato de email inválido') : 'El email es obligatorio';
+      }
+      if (field === 'password') {
+        next.password = value ? (validatePassword(value) ? '' : 'La contraseña debe tener mínimo 6 caracteres') : 'La contraseña es obligatoria';
+      }
+      if (field === 'confirmPassword') {
+        next.confirmPassword = value ? (value === password ? '' : 'Las contraseñas no coinciden') : 'Confirma la contraseña';
+      }
+      return next;
+    });
+  };
+
   const handleRegister = () => {
+    // validar todos los campos antes de enviar
+    validateField('email', email);
+    validateField('password', password);
+    validateField('confirmPassword', confirmPassword);
+
+    // Pequeña espera para que setErrors se aplique o comprobar directamente:
+    const hasErrors =
+      !validateEmail(email) ||
+      !validatePassword(password) ||
+      password !== confirmPassword ||
+      fullName.trim() === '' ||
+      !acceptTerms;
+
+    if (hasErrors) {
+      return;
+    }
+
+    // simulación de registro exitoso
+    Alert.alert('Registro exitoso', 'Tu cuenta ha sido creada correctamente.');
     console.log('Register attempt:', {
       fullName,
       email,
@@ -51,11 +104,13 @@ export default function RegisterForm() {
             style={styles.input}
             value={email}
             onChangeText={setEmail}
+            onBlur={() => validateField('email', email)}
             placeholder=""
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
           />
+          {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Contraseña</Text>
@@ -64,11 +119,13 @@ export default function RegisterForm() {
               style={styles.passwordInput}
               value={password}
               onChangeText={setPassword}
+              onBlur={() => validateField('password', password)}
               placeholder=""
               secureTextEntry={!showPassword}
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
             <TouchableOpacity
               style={styles.eyeIcon}
               onPress={() => setShowPassword(!showPassword)}
@@ -88,11 +145,13 @@ export default function RegisterForm() {
               style={styles.passwordInput}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              onBlur={() => validateField('confirmPassword', confirmPassword)}
               placeholder=""
               secureTextEntry={!showConfirmPassword}
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {errors.confirmPassword ? <Text style={styles.errorText}>{errors.confirmPassword}</Text> : null}
             <TouchableOpacity
               style={styles.eyeIcon}
               onPress={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -121,10 +180,10 @@ export default function RegisterForm() {
         <TouchableOpacity
           style={[
             styles.registerButton,
-            !acceptTerms && styles.registerButtonDisabled,
+            !isFormValid && styles.registerButtonDisabled,
           ]}
           onPress={handleRegister}
-          disabled={!acceptTerms}
+          disabled={!isFormValid}
         >
           <Text style={styles.registerButtonText}>Registrarse</Text>
         </TouchableOpacity>
@@ -233,5 +292,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '600',
+  },
+  errorText: {
+    color: '#D32F2F',
+    fontSize: 13,
+    marginTop: 6,
+    marginLeft: 6,
   },
 });
