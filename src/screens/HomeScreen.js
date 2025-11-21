@@ -1,19 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import {View,Text,FlatList,Image,TouchableOpacity,StyleSheet,ScrollView,Dimensions,Alert,ActivityIndicator, } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import { Bell, Heart, Star, Ticket, Popcorn, CreditCard } from 'lucide-react-native';
 import { getNowPlayingMovies } from '../api/tmdb';
 import NotificationService from '../services/NotificationService';
 import StorageService from '../services/storageService';
@@ -41,26 +29,26 @@ export default function HomeScreen() {
   const initializeApp = async () => {
     setLoading(true);
     
-    // 1️⃣ Solicitar permisos
+    //  Solicitar permisos
     const granted = await NotificationService.requestPermissions();
     
     if (granted) {
       setupNotificationListeners();
       
-      // 2️⃣ Enviar notificación de promoción diaria
+      //  Enviar notificación de promoción diaria
       await sendDailyPromo();
     }
 
-    // 3️⃣ Cargar películas
+    //  Cargar películas
     await fetchMovies();
     
-    // 4️⃣ Verificar nuevas películas
+    //  Verificar nuevas películas
     await checkForNewMovies();
     
-    // 5️⃣ Verificar carrito abandonado
+    //  Verificar carrito abandonado
     await checkAbandonedCart();
     
-    // 6️⃣ Cargar historial
+    //  Cargar historial
     await loadLastSeen();
     
     setLoading(false);
@@ -123,7 +111,7 @@ export default function HomeScreen() {
     );
   };
 
-  // 🔥 Enviar promoción diaria
+  //  Enviar promoción diaria
   const sendDailyPromo = async () => {
     const prefs = await StorageService.getPreferences();
     if (!prefs.promotionsEnabled) return;
@@ -141,7 +129,7 @@ export default function HomeScreen() {
     }
   };
 
-  // 🎬 Verificar nuevas películas
+  //  Verificar nuevas películas
   const checkForNewMovies = async () => {
     try {
       const data = await getNowPlayingMovies();
@@ -165,7 +153,7 @@ export default function HomeScreen() {
     }
   };
 
-  // 🛒 Verificar carrito abandonado
+  //  Verificar carrito abandonado
   const checkAbandonedCart = async () => {
     try {
       const cart = await StorageService.getCart();
@@ -183,7 +171,7 @@ export default function HomeScreen() {
     }
   };
 
-  // 🔔 Programar recordatorio de película
+  //  Programar recordatorio de película
   const scheduleMovieReminder = async (movie) => {
     const prefs = await StorageService.getPreferences();
     if (!prefs.remindersEnabled) {
@@ -225,7 +213,7 @@ export default function HomeScreen() {
     );
   };
 
-  // ❤️ Agregar a favoritos con notificación
+  //  Agregar a favoritos con notificación
   const addToFavorites = async (movie) => {
     const added = await StorageService.addFavorite(movie);
     if (added) {
@@ -236,7 +224,7 @@ export default function HomeScreen() {
     }
   };
 
-  // 🎨 Renderizado
+  //  Renderizado
   const renderBanner = ({ item }) => (
     <Image
       source={{ uri: `https://image.tmdb.org/t/p/w500${item.backdrop_path}` }}
