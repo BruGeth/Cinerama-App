@@ -1,6 +1,16 @@
-import React from "react";
-import {  View,  Text,  Image,  StyleSheet,  TouchableOpacity,  Dimensions,} from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Alert,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import StorageService from "../services/storageService";
 
 const CARD_WIDTH = Dimensions.get("window").width * 0.45;
 
@@ -13,9 +23,65 @@ export default function MovieCard({
   ...movie
 }) {
   const navigation = useNavigation();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    checkFavoriteStatus();
+  }, [movie.id]);
+
+  const checkFavoriteStatus = async () => {
+    const status = await StorageService.isFavorite(movie.id);
+    setIsFavorite(status);
+  };
+
+  const toggleFavorite = async () => {
+    try {
+      if (isFavorite) {
+        await StorageService.removeFavorite(movie.id);
+        setIsFavorite(false);
+        Alert.alert("❌ Eliminado", "Película eliminada de favoritos");
+      } else {
+        const movieData = {
+          id: movie.id,
+          title,
+          poster_path: poster,
+          genre,
+          runtime: duration,
+          ...movie,
+        };
+        await StorageService.addFavorite(movieData);
+        setIsFavorite(true);
+        Alert.alert("⭐ Agregado", "Película agregada a favoritos");
+      }
+    } catch (error) {
+      console.error("Error al cambiar favorito:", error);
+      Alert.alert("Error", "No se pudo actualizar favoritos");
+    }
+  };
+
+  const handleViewDetails = () => {
+    // Agregar al historial cuando se ven detalles
+    StorageService.addToHistory({
+      id: movie.id,
+      title,
+      poster_path: poster,
+      genre,
+      runtime: duration,
+    });
+    navigation.navigate("Detalles", { movie: { ...movie, title, poster_path: poster, genre, runtime: duration } });
+  };
 
   return (
     <View style={[styles.card, { borderColor: sectionColor }]}>
+      {/* Botón de favorito en la esquina superior derecha */}
+      <TouchableOpacity style={styles.favoriteButton} onPress={toggleFavorite}>
+        <Ionicons
+          name={isFavorite ? "heart" : "heart-outline"}
+          size={24}
+          color={isFavorite ? "#A91B3C" : "#fff"}
+        />
+      </TouchableOpacity>
+
       <Image
         source={{ uri: `https://image.tmdb.org/t/p/w500${poster}` }}
         style={styles.image}
@@ -36,7 +102,7 @@ export default function MovieCard({
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, { backgroundColor: "#333" }]}
-            onPress={() => navigation.navigate("Detalles", { movie })}
+            onPress={handleViewDetails}
           >
             <Text style={styles.buttonText}>Detalles</Text>
           </TouchableOpacity>
@@ -55,6 +121,16 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     elevation: 3,
     borderWidth: 1.2,
+    position: "relative",
+  },
+  favoriteButton: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    zIndex: 10,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 20,
+    padding: 6,
   },
   image: {
     width: "100%",
