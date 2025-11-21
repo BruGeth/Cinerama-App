@@ -33,14 +33,21 @@ const promociones = [
   },
 ];
 
-export default function PromocionesScreen() {
+export default function PromocionesScreen({ navigation }) {
+  const handleVerMas = (promo) => {
+    navigation.navigate('PromocionDetalle', { promocionId: promo.id });
+  };
+
   const renderPromo = ({ item }) => (
     <View style={styles.card}>
       <Image source={{ uri: item.image }} style={styles.image} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description}>{item.description}</Text>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => handleVerMas(item)}
+        >
           <Text style={styles.buttonText}>Ver más</Text>
         </TouchableOpacity>
       </View>
