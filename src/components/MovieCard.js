@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Alert,
-} from "react-native";
+import {View,Text,Image,StyleSheet,TouchableOpacity,Dimensions,Alert, } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import StorageService from "../services/storageService";
