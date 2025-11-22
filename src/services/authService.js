@@ -1,6 +1,12 @@
 import * as SecureStore from 'expo-secure-store';
+import Constants from 'expo-constants';
 
-const API_BASE = process.env.API_BASE || 'https://api.example.com';
+// Resolve API base from Expo config extras (app.json/app.config.js) or process.env
+const API_BASE =
+  (Constants?.manifest?.extra && Constants.manifest.extra.API_BASE) ||
+  (Constants?.expoConfig?.extra && Constants.expoConfig.extra.API_BASE) ||
+  process.env.API_BASE ||
+  'https://api.example.com';
 
 async function saveToken(token) {
   if (!token) return;
