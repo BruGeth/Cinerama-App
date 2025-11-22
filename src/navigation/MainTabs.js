@@ -1,12 +1,26 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import CarteleraScreen from "../screens/CarteleraScreen";
 import PromocionesScreen from "../screens/PromocionesScreen";
+import PromocionDetalleScreen from "../screens/PromocionDetalleScreen";
+import PromocionQRScreen from "../screens/PromocionQRScreen";
 import PerfilScreen from "../screens/PerfilScreen";
 import CinesCercaScreen from "../screens/CinesCercaScreen";
 
 const Tab = createBottomTabNavigator();
+const PromocionesStack = createNativeStackNavigator();
+
+function PromocionesStackScreen() {
+  return (
+    <PromocionesStack.Navigator screenOptions={{ headerShown: false }}>
+      <PromocionesStack.Screen name="PromocionesLista" component={PromocionesScreen} />
+      <PromocionesStack.Screen name="PromocionDetalle" component={PromocionDetalleScreen} />
+      <PromocionesStack.Screen name="PromocionQR" component={PromocionQRScreen} />
+    </PromocionesStack.Navigator>
+  );
+}
 
 export default function MainTabs() {
   return (
@@ -36,8 +50,8 @@ export default function MainTabs() {
       
       <Tab.Screen name="Home" component={HomeScreen} options={{ title: "Home" }} />
       <Tab.Screen name="Cartelera" component={CarteleraScreen} options={{ title: "Cartelera" }} />
-      <Tab.Screen name="Promociones" component={PromocionesScreen} options={{ title: "Promociones" }} />
       <Tab.Screen name="Cines" component={CinesCercaScreen} options={{ title: "Cines" }} />
+      <Tab.Screen name="Promociones" component={PromocionesStackScreen} options={{ title: "Promociones" }} />
       <Tab.Screen name="Perfil" component={PerfilScreen} options={{ title: "Perfil" }} />
     </Tab.Navigator>
   );
