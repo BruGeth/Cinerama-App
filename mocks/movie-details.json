@@ -1,0 +1,15 @@
+{
+  "id": 101,
+  "title": "Película A",
+  "overview": "Sinopsis completa de la película A.",
+  "poster_path": "/posterA.jpg",
+  "backdrop_path": "/backdropA.jpg",
+  "release_date": "2024-08-01",
+  "vote_average": 7.8,
+  "genres": [ { "id": 1, "name": "Acción" }, { "id": 2, "name": "Aventura" } ],
+  "runtime": 125,
+  "credits": {
+    "cast": [ { "id": 201, "name": "Actor 1", "character": "Protagonista" } ],
+    "crew": [ { "id": 301, "name": "Director 1", "job": "Director" } ]
+  }
+}
