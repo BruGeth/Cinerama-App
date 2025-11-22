@@ -7,6 +7,7 @@ import PromocionesScreen from "../screens/PromocionesScreen";
 import PromocionDetalleScreen from "../screens/PromocionDetalleScreen";
 import PromocionQRScreen from "../screens/PromocionQRScreen";
 import PerfilScreen from "../screens/PerfilScreen";
+import CinesCercaScreen from "../screens/CinesCercaScreen";
 
 const Tab = createBottomTabNavigator();
 const PromocionesStack = createNativeStackNavigator();
@@ -36,6 +37,8 @@ export default function MainTabs() {
               return <MaterialIcons name="local-movies" size={size} color={color} />;
             case "Promociones":
               return <FontAwesome5 name="ticket-alt" size={size} color={color} />;
+            case "Cines":
+              return <MaterialIcons name="location-on" size={size} color={color} />;
             case "Perfil":
               return <Ionicons name={focused ? "person" : "person-outline"} size={size} color={color} />;
             default:
@@ -44,8 +47,10 @@ export default function MainTabs() {
         },
       })}
     >
+      
       <Tab.Screen name="Home" component={HomeScreen} options={{ title: "Home" }} />
       <Tab.Screen name="Cartelera" component={CarteleraScreen} options={{ title: "Cartelera" }} />
+      <Tab.Screen name="Cines" component={CinesCercaScreen} options={{ title: "Cines" }} />
       <Tab.Screen name="Promociones" component={PromocionesStackScreen} options={{ title: "Promociones" }} />
       <Tab.Screen name="Perfil" component={PerfilScreen} options={{ title: "Perfil" }} />
     </Tab.Navigator>
