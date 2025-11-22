@@ -1,0 +1,23 @@
+{
+  "page": 1,
+  "total_pages": 5,
+  "total_results": 100,
+  "results": [
+    {
+      "id": 101,
+      "title": "Película A",
+      "overview": "Sinopsis de la película A.",
+      "poster_path": "/posterA.jpg",
+      "release_date": "2024-08-01",
+      "vote_average": 7.8
+    },
+    {
+      "id": 102,
+      "title": "Película B",
+      "overview": "Sinopsis de la película B.",
+      "poster_path": "/posterB.jpg",
+      "release_date": "2024-07-15",
+      "vote_average": 6.5
+    }
+  ]
+}

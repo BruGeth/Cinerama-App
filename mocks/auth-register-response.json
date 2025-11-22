@@ -1,0 +1,4 @@
+{
+  "token": "mocked_register_token_abc123",
+  "user": { "id": "u_1", "name": "Usuario Mock", "email": "mock@example.com" }
+}
