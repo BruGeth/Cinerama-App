@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {View,Text,TextInput,TouchableOpacity,StyleSheet,Alert, } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { validateEmail, validatePassword } from '../utils/validators';
+import useAuth from '../hooks/useAuth';
+import { AuthContext } from '../context/AuthContext';
 
 export default function RegisterForm() {
   const [fullName, setFullName] = useState('');
@@ -16,6 +18,8 @@ export default function RegisterForm() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const { register, loading } = useAuth();
+  const { signIn } = useContext(AuthContext);
 
 
 const isFormValid =
@@ -44,7 +48,7 @@ const isFormValid =
     });
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     // validar todos los campos antes de enviar
     validateField('email', email);
     validateField('password', password);
@@ -62,15 +66,28 @@ const isFormValid =
       return;
     }
 
-    // simulación de registro exitoso
-    Alert.alert('Registro exitoso', 'Tu cuenta ha sido creada correctamente.');
-    console.log('Register attempt:', {
-      fullName,
-      email,
-      password,
-      confirmPassword,
-      acceptTerms,
-    });
+    try {
+      console.log('Register attempt:', {
+        fullName,
+        email,
+        password,
+        acceptTerms,
+      });
+      await register({
+        fullName,
+        email,
+        password,
+        confirmPassword,
+        acceptTerms,
+      });
+      // Actualizar contexto global
+      const userData = { fullName, email };
+      await signIn(userData);
+      Alert.alert('Registro exitoso', 'Tu cuenta ha sido creada correctamente.');
+    } catch (error) {
+      console.error('Register error:', error);
+      Alert.alert('Error de registro', error?.message || 'No se pudo crear la cuenta');
+    }
   };
 
   return (
@@ -173,12 +190,12 @@ const isFormValid =
         <TouchableOpacity
           style={[
             styles.registerButton,
-            !isFormValid && styles.registerButtonDisabled,
+            (!isFormValid || loading) && styles.registerButtonDisabled,
           ]}
           onPress={handleRegister}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
-          <Text style={styles.registerButtonText}>Registrarse</Text>
+          <Text style={styles.registerButtonText}>{loading ? 'Cargando...' : 'Registrarse'}</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -48,7 +48,33 @@ TMDB_API_KEY=TU_TMDB_API_KEY_AQUI
 - Reemplaza TU_TMDB_API_KEY_AQUI por tu clave real.
 - Mantén este archivo local y no lo subas al repositorio.
 
-## Contribuir
-1. Crear un branch feature/bugfix.
-2. Añadir cambios y tests (si aplica).
-3. Abrir pull request con descripción de cambios.
+## 🚀 PUBLICACIÓN EN GOOGLE PLAY STORE
+
+Esta app está configurada para publicar en Google Play Store usando **EAS Build**.
+
+### Documentación Importante
+- **[README_PUBLICATION.md](README_PUBLICATION.md)** ← **COMIENZA AQUÍ** - Guía completa de publicación
+- [BUILD_AND_PUBLISH_GUIDE.md](BUILD_AND_PUBLISH_GUIDE.md) - Guía detallada
+- [BUILD_MANUAL_INSTRUCTIONS.md](BUILD_MANUAL_INSTRUCTIONS.md) - Instrucciones manuales
+- [PRIVACY_POLICY.md](PRIVACY_POLICY.md) - Política de privacidad
+- [TECHNICAL_CONFIG.md](TECHNICAL_CONFIG.md) - Configuración técnica
+
+### Generar Builds
+
+**APK (Para Teléfono)**:
+```bash
+eas build --platform android --profile preview
+```
+
+**AAB (Para Play Store)**:
+```bash
+eas build --platform android --profile production
+```
+
+### Información del Proyecto
+- **Package**: `com.cinerama.app`
+- **Version**: `1.0.0`
+- **Min SDK**: 23 (Android 6.0)
+- **Target SDK**: 34 (Android 14)
+- **EAS Project**: https://expo.dev/accounts/leeashh/projects/cinerama
+

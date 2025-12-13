@@ -1,9 +1,16 @@
 import axios from 'axios';
-import { API_BASE_URL } from '@env';
+import Constants from 'expo-constants';
+
+// Resolve API base from Expo extras (bundled in EAS builds)
+const API_BASE =
+  (Constants?.manifest?.extra && Constants.manifest.extra.API_BASE) ||
+  (Constants?.expoConfig?.extra && Constants.expoConfig.extra.API_BASE) ||
+  process.env.API_BASE ||
+  '';
 
 // Configuración base de axios
 const api = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
+  baseURL: `${API_BASE}/api`,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

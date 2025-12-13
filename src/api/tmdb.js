@@ -1,4 +1,10 @@
-import { TMDB_API_KEY } from '@env';
+import Constants from 'expo-constants';
+
+// Obtain TMDB key from Expo extras (included in EAS builds)
+const TMDB_API_KEY =
+  (Constants?.manifest?.extra && Constants.manifest.extra.TMDB_API_KEY) ||
+  (Constants?.expoConfig?.extra && Constants.expoConfig.extra.TMDB_API_KEY) ||
+  process.env.TMDB_API_KEY;
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 

@@ -29,7 +29,9 @@ async function request(path, options = {}) {
   };
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(`${API_BASE}${path}`, {
+  const fullUrl = `${API_BASE}${path}`;
+
+  const res = await fetch(fullUrl, {
     ...options,
     headers,
   });
@@ -48,33 +50,33 @@ async function request(path, options = {}) {
   return json;
 }
 
-export async function register({ name, email, password }) {
-  const body = { name, email, password };
-  const data = await request('/auth/register', { method: 'POST', body: JSON.stringify(body) });
+export async function register({ fullName, email, password, confirmPassword }) {
+  const body = { fullName, email, password, confirmPassword };
+  const data = await request('/api/auth/register', { method: 'POST', body: JSON.stringify(body) });
   if (data && data.token) await saveToken(data.token);
   return data;
 }
 
 export async function login({ email, password }) {
   const body = { email, password };
-  const data = await request('/auth/login', { method: 'POST', body: JSON.stringify(body) });
+  const data = await request('/api/auth/login', { method: 'POST', body: JSON.stringify(body) });
   if (data && data.token) await saveToken(data.token);
   return data;
 }
 
 export async function verifyCode({ email, code }) {
   const body = { email, code };
-  const data = await request('/auth/verify', { method: 'POST', body: JSON.stringify(body) });
+  const data = await request('/api/auth/verify', { method: 'POST', body: JSON.stringify(body) });
   if (data && data.token) await saveToken(data.token);
   return data;
 }
 
 export async function me() {
-  return await request('/auth/me', { method: 'GET' });
+  return await request('/api/auth/me', { method: 'GET' });
 }
 
 export async function logout() {
-  try { await request('/auth/logout', { method: 'POST' }); } catch (e) { /* ignore server errors */ }
+  try { await request('/api/auth/logout', { method: 'POST' }); } catch (e) { /* ignore server errors */ }
   await deleteToken();
 }
 

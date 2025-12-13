@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { View,Text,TextInput,TouchableOpacity,StyleSheet,Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { validateEmail, validatePassword } from '../utils/validators';
+import useAuth from '../hooks/useAuth';
+import { AuthContext } from '../context/AuthContext';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -9,16 +11,30 @@ export default function LoginForm() {
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
+  const { login, loading } = useAuth();
+  const { signIn } = useContext(AuthContext);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     validateField('email', email);
     validateField('password', password);
 
     const hasErrors = !validateEmail(email) || !validatePassword(password) || email.trim() === '' || password === '';
     if (hasErrors) return;
 
-    Alert.alert('Login exitoso', 'Has iniciado sesión correctamente (simulado).');
-    console.log('Login attempt:', { email, password, rememberMe });
+    try {
+      console.log('Login attempt:', { email, password, rememberMe });
+      const data = await login({ email, password });
+      // Actualizar contexto global
+      if (data && data.user) {
+        await signIn(data.user);
+      } else if (data) {
+        await signIn(data);
+      }
+      Alert.alert('Login exitoso', 'Has iniciado sesión correctamente.');
+    } catch (error) {
+      console.error('Login error:', error);
+      Alert.alert('Error de login', error?.message || 'No se pudo iniciar sesión');
+    }
   };
 
   const handleForgotPassword = () => {
@@ -92,9 +108,9 @@ export default function LoginForm() {
           </View>
         </View>
         <TouchableOpacity style={[styles.loginButton,
-          !isFormValid && styles.loginButtonDisabled,
-        ]} onPress={handleLogin} disabled={!isFormValid}>
-          <Text style={styles.loginButtonText}>Iniciar sesión</Text>
+          (!isFormValid || loading) && styles.loginButtonDisabled,
+        ]} onPress={handleLogin} disabled={!isFormValid || loading}>
+          <Text style={styles.loginButtonText}>{loading ? 'Cargando...' : 'Iniciar sesión'}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.rememberContainer}
