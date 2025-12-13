@@ -1,29 +1,54 @@
 {
   "expo": {
-    "name": "Cinerama-App",
-    "slug": "Cinerama-App",
+    "name": "Cinerama",
+    "slug": "cinerama",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "scheme": "cinerama",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cinerama.app"
     },
     "android": {
+      "package": "com.cinerama.app",
+      "versionCode": 1,
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "INTERNET",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "VIBRATE",
+        "SYSTEM_ALERT_WINDOW",
+        "CAMERA",
+        "RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "minSdkVersion": 23,
+      "targetSdkVersion": 34
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c731deeb-35bf-4ba1-b6cc-0d30142d45a8"
+      },
+      "API_BASE": "http://192.168.1.49:8080",
+      "TMDB_API_KEY": "e5cbe4aaec7d2125bd4dc8ca643c5053",
+      "BUILD_ENV": "local"
     }
   }
 }
